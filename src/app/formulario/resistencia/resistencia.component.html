@@ -1,0 +1,100 @@
+<div class="max-w-5xl mx-auto p-8 bg-white">
+  <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">Resistencias</h2>
+
+  <div class="flex justify-center space-x-8 mb-8">
+    <form class="max-w-sm">
+      <label for="countries1" class="block mb-2 text-sm font-medium text-gray-900">BANDA 1</label>
+      <select id="countries1" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        <option selected>Color1</option>
+        <option>Negro</option>
+        <option>Cafe</option>
+        <option>Rojo</option>
+        <option>Naranja</option>
+        <option>Amarillo</option>
+        <option>Verde</option>
+        <option>Azul</option>
+        <option>Violeta</option>
+        <option>Gris</option>
+        <option>Blanco</option>
+      </select>
+    </form>
+
+    <form class="max-w-sm">
+      <label for="countries2" class="block mb-2 text-sm font-medium text-gray-900">BANDA 2</label>
+      <select id="countries2" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        <option selected>Color2</option>
+        <option>Negro</option>
+        <option>Cafe</option>
+        <option>Rojo</option>
+        <option>Naranja</option>
+        <option>Amarillo</option>
+        <option>Verde</option>
+        <option>Azul</option>
+        <option>Violeta</option>
+        <option>Gris</option>
+        <option>Blanco</option>
+      </select>
+    </form>
+
+    <form class="max-w-sm">
+      <label for="countries3" class="block mb-2 text-sm font-medium text-gray-900">BANDA 3</label>
+      <select id="countries3" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        <option selected>Color3</option>
+        <option>Negro</option>
+        <option>Cafe</option>
+        <option>Rojo</option>
+        <option>Naranja</option>
+        <option>Amarillo</option>
+        <option>Verde</option>
+        <option>Azul</option>
+        <option>Violeta</option>
+        <option>Gris</option>
+        <option>Blanco</option>
+      </select>
+    </form>
+
+    <form class="max-w-sm">
+      <label class="block mb-2 text-sm font-medium text-gray-900">Valor Tolerancia</label>
+      <div>
+        <input type="radio" id="default-radio-1" name="default-radio" value="Oro" checked>
+        <label for="default-radio-1" class="mr-4">Oro</label>
+        <input type="radio" id="default-radio-2" name="default-radio" value="Plata">
+        <label for="default-radio-2" class="mr-4">Plata</label>
+      </div>
+    </form>
+  </div>
+
+  <div class="flex justify-center mb-8">
+    <button (click)="guardar()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">Guardar</button>
+    <button (click)="borrarResistencias()" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5">Borrar Todo</button>
+    <button (click)="mostrarTabla()" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5">Mostrar Tabla</button>
+  </div>
+
+  <!-- Tabla para mostrar las resistencias -->
+  <div *ngIf="resistencias.length > 0">
+    <table class="min-w-full border-collapse border border-gray-400">
+      <thead>
+        <tr>
+          <th class="border border-gray-300 px-4 py-2">Banda 1</th>
+          <th class="border border-gray-300 px-4 py-2">Banda 2</th>
+          <th class="border border-gray-300 px-4 py-2">Banda 3</th>
+          <th class="border border-gray-300 px-4 py-2">Valor Tolerancia</th>
+          <th class="border border-gray-300 px-4 py-2">Multiplicación</th>
+          <th class="border border-gray-300 px-4 py-2">Valor Mínimo</th>
+          <th class="border border-gray-300 px-4 py-2">Valor Máximo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let resistencia of resistencias">
+          <td [ngStyle]="{'background-color': obtenerColor(resistencia.banda1), 'color': resistencia.banda1 === 'Blanco' ? 'black' : 'white'}" class="border border-gray-300 px-4 py-2">{{ resistencia.banda1 }}</td>
+          <td [ngStyle]="{'background-color': obtenerColor(resistencia.banda2), 'color': resistencia.banda2 === 'Blanco' ? 'black' : 'white'}" class="border border-gray-300 px-4 py-2">{{ resistencia.banda2 }}</td>
+          <td [ngStyle]="{'background-color': obtenerColor(resistencia.banda3), 'color': resistencia.banda3 === 'Blanco' ? 'black' : 'white'}" class="border border-gray-300 px-4 py-2">{{ resistencia.banda3 }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ resistencia.valorRadio }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ resistencia.multiplicacion }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ resistencia.valorMinimo }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ resistencia.valorMaximo }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
