@@ -1,6 +1,23 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+interface Resistencia {
+  banda1: string;
+  banda2: string;
+  banda3: string;
+  valorRadio: string;
+  multiplicacion: number;
+  valorMinimo: number;
+  valorMaximo: number;
+}
+
+interface ResistenciaColores {
+  banda1: string;
+  banda2: string;
+  banda3: string;
+  valorRadio: string;
+}
+
 @Component({
   selector: 'app-resistencia',
   standalone: true,
@@ -9,15 +26,8 @@ import { CommonModule } from '@angular/common';
   styles: []
 })
 export default class ResistenciaComponent {
-  resistencias: {
-    banda1: string;
-    banda2: string;
-    banda3: string;
-    valorRadio: string;
-    multiplicacion: number;
-    valorMinimo: number;
-    valorMaximo: number;
-  }[] = [];
+  resistencias: Resistencia[] = [];
+  mostrarTablaFlag: boolean = false; // Variable para controlar la visibilidad de la tabla
 
   // Mapeo de colores a sus valores
   private valoresBanda1: { [key: string]: number } = {
@@ -75,31 +85,60 @@ export default class ResistenciaComponent {
     const banda2 = banda2Select.options[banda2Select.selectedIndex].text;
     const banda3 = banda3Select.options[banda3Select.selectedIndex].text;
 
-    // Crear un objeto para guardar en la lista
-    const nuevaResistencia = { banda1, banda2, banda3, valorRadio, multiplicacion: 0, valorMinimo: 0, valorMaximo: 0 };
+    // Crear un objeto para guardar en la lista con todos los datos
+    const nuevaResistencia: Resistencia = {
+      banda1,
+      banda2,
+      banda3,
+      valorRadio,
+      multiplicacion: 0,
+      valorMinimo: 0,
+      valorMaximo: 0,
+    };
 
     // Agregar el objeto al array
     this.resistencias.push(nuevaResistencia);
 
+    // Crear un objeto para guardar solo los colores en localStorage
+    const coloresResistencia: ResistenciaColores = {
+      banda1,
+      banda2,
+      banda3,
+      valorRadio,
+    };
+
     // Guardar solo los colores en localStorage
-    localStorage.setItem('resistencias', JSON.stringify(this.resistencias));
+    localStorage.setItem('resistencias', JSON.stringify([...this.getStoredColores(), coloresResistencia]));
+    
+    // Mostrar la tabla después de guardar
     this.mostrarTabla();
   }
 
   cargarResistencias() {
     const storedResistencias = localStorage.getItem('resistencias');
     if (storedResistencias) {
-      this.resistencias = JSON.parse(storedResistencias);
+      const coloresResistencias: ResistenciaColores[] = JSON.parse(storedResistencias);
+      this.resistencias = coloresResistencias.map(res => ({
+        ...res,
+        multiplicacion: 0,
+        valorMinimo: 0,
+        valorMaximo: 0,
+      }));
     }
   }
 
-  calcularValores(resistencia: any) {
+  getStoredColores(): ResistenciaColores[] {
+    const storedResistencias = localStorage.getItem('resistencias');
+    return storedResistencias ? JSON.parse(storedResistencias) : [];
+  }
+
+  calcularValores(resistencia: Resistencia) {
     const valorBanda1 = this.valoresBanda1[resistencia.banda1];
     const valorBanda2 = this.valoresBanda2[resistencia.banda2];
     const valorBanda3 = this.valoresBanda3[resistencia.banda3];
 
-    // Realizar la multiplicación
-    const multiplicacion = (valorBanda1 + valorBanda2) * valorBanda3;
+    // Calcular el valor de resistencia
+    const multiplicacion = (valorBanda1 * 10 + valorBanda2) * valorBanda3;
 
     // Obtener el valor de tolerancia según el radio seleccionado
     const valorTolerancia = resistencia.valorRadio === 'Oro' ? 0.05 : 0.1; // 5% para oro, 10% para plata
@@ -118,11 +157,13 @@ export default class ResistenciaComponent {
       resistencia.valorMinimo = minimo;
       resistencia.valorMaximo = maximo;
     }
+    this.mostrarTablaFlag = true; // Cambiar el estado para mostrar la tabla
   }
 
   borrarResistencias() {
     localStorage.removeItem('resistencias');
     this.resistencias = []; // Limpiar la lista de resistencias
+    this.mostrarTablaFlag = false; // Ocultar la tabla
   }
 
   obtenerColor(banda: string): string {

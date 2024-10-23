@@ -1,6 +1,6 @@
 <div class="flex space-x-8">
-  <!-- Formulario para registrar empleados -->
-  <form [formGroup]="formulario" (ngSubmit)="agregarEmpleado()" class="w-1/2 p-6 space-y-4 bg-white shadow-md rounded-lg">
+  <!-- Formulario para registrar/editar empleados -->
+  <form [formGroup]="formulario" (ngSubmit)="agregarOActualizarEmpleado()" class="w-1/2 p-6 space-y-4 bg-white shadow-md rounded-lg">
     <div class="grid grid-cols-2 gap-6">
       <!-- Campo para matrícula -->
       <div>
@@ -60,8 +60,10 @@
 
     <!-- Botones para acciones -->
     <div class="flex justify-between mt-4">
-      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Agregar</button>
-      <button type="button" (click)="actualizarEmpleado()" class="bg-yellow-600 text-white px-4 py-2 rounded-md hover:bg-yellow-700">Actualizar</button>
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+        {{ modoEdicion ? 'Actualizar' : 'Agregar' }}
+      </button>
+      <button type="button" (click)="cargarEmpleadoParaEditar()" class="bg-yellow-600 text-white px-4 py-2 rounded-md hover:bg-yellow-700">Modificar</button>
       <button type="button" (click)="eliminarEmpleado()" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Eliminar</button>
     </div>
   </form>
@@ -96,6 +98,6 @@
         </tbody>
       </table>
     </div>
-    <div class="mt-4 text-lg font-bold">Total pagos nomina: ${{ calcularTotal() }}</div>
+    <div class="mt-4 text-lg font-bold">Total pagos nómina: ${{ calcularTotalPagos() }}</div>
   </div>
 </div>
