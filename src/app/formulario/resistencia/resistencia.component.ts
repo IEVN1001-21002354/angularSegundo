@@ -137,8 +137,11 @@ export default class ResistenciaComponent {
     const valorBanda2 = this.valoresBanda2[resistencia.banda2];
     const valorBanda3 = this.valoresBanda3[resistencia.banda3];
 
-    // Calcular el valor de resistencia
-    const multiplicacion = (valorBanda1 * 10 + valorBanda2) * valorBanda3;
+    // Combinar banda1 y banda2 en un solo valor
+    const valorCombinado = parseInt(`${valorBanda1}${valorBanda2}`);
+
+    // Multiplicar el valor combinado por el valor de banda3
+    const multiplicacion = valorCombinado * valorBanda3;
 
     // Obtener el valor de tolerancia según el radio seleccionado
     const valorTolerancia = resistencia.valorRadio === 'Oro' ? 0.05 : 0.1; // 5% para oro, 10% para plata
@@ -148,7 +151,8 @@ export default class ResistenciaComponent {
     const maximo = multiplicacion + (multiplicacion * valorTolerancia);
 
     return { multiplicacion, minimo, maximo };
-  }
+}
+
 
   mostrarTabla() {
     for (let resistencia of this.resistencias) {
